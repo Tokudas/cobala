@@ -10,7 +10,8 @@ try:
     noi_dung = response.text
 
     # Tìm link m3u8 chứa token
-    match = re.search(r'http[^\s"\'<>]*\.m3u8\?token=[a-zA-Z0-9]+', THVL1 HD)
+    match = re.search(r'https?://[^\s"\'<>]*\.m3u8\?[^\s"\'<>]*token=[a-zA-Z0-9]+', noi_dung)
+
     
     if match:
         link_co_key_moi = match.group(0)
