@@ -1,35 +1,24 @@
-name: Tu Dong Cap Nhat Key IPTV
-
+name: Auto Update IPTV
 on:
   schedule:
     - cron: '0 */2 * * *'
   workflow_dispatch:
-
 jobs:
-  update-iptv:
+  build:
     runs-on: ubuntu-latest
     permissions:
       contents: write
-
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v3
-
-    - name: Cai dat Python
-      uses: actions/setup-python@v4
+    - uses: actions/checkout@v3
+    - uses: actions/setup-python@v4
       with:
-        python-version: '3.x'
-
-    - name: Cai dat thu vien
-      run: pip install requests
-
-    - name: Chay File boc tach Key
-      run: python update_iptv.py
-
-    - name: Luu lai file .m3u
-      run: |
+        python-version: '3.10'
+    - run: pip install requests
+    - run: python update_iptv.py
+    - run: |
         git config --local user.name "github-actions[bot]"
         git config --local user.email "github-actions[bot]@users.noreply.github.com"
         git add list-kenh.m3u
-        git commit -m "Tu dong cap nhat link IPTV" || exit 0
+        git commit -m "Update" || exit 0
         git push
+        
