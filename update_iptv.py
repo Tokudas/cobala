@@ -2,7 +2,7 @@ import requests
 import re
 
 # Nhập đường link trang web nguồn (sau này bạn tìm được link nguồn nào thì thay vào dòng này)
-url_nguon = "http://trang-web-nguon-cua-ban.com/play/vtv1"
+url_nguon = "https://www.thvli.vn/live/thvl1-hd"
 
 try:
     headers = {'User-Agent': 'Mozilla/5.0'}
@@ -10,7 +10,7 @@ try:
     noi_dung = response.text
 
     # Tìm link m3u8 chứa token
-    match = re.search(r'http[^\s"\'<>]*\.m3u8\?token=[a-zA-Z0-9]+', noi_dung)
+    match = re.search(r'http[^\s"\'<>]*\.m3u8\?token=[a-zA-Z0-9]+', THVL1 HD)
     
     if match:
         link_co_key_moi = match.group(0)
