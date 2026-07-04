@@ -1,8 +1,8 @@
 import requests
 import re
 
-ten_kenh = "VTV1"
-url_nguon = "https://www.thvli.vn/live/thv1-hd" # Bạn có thể thay bằng link web khác nếu cần
+ten_kenh = "Giọng Ca Để Đời"
+url_nguon = "https://www.youtube.com/live/LDivJzkSTXY"
 
 try:
     headers = {'User-Agent': 'Mozilla/5.0'}
