@@ -2,8 +2,8 @@ name: Auto Update YouTube Live
 
 on:
   schedule:
-    - cron: '0 */3 * * *' # Chạy tự động mỗi 3 tiếng
-  workflow_dispatch:      # Nút bấm chạy thủ công
+    - cron: '0 */3 * * *'
+  workflow_dispatch:
 
 jobs:
   build:
@@ -18,10 +18,11 @@ jobs:
         with:
           python-version: '3.x'
 
-      - name: Install yt-dlp
+      - name: Install Node.js & yt-dlp (Nightly)
         run: |
+          sudo apt-get update && sudo apt-get install -y nodejs
           python -m pip install --upgrade pip
-          pip install yt-dlp
+          pip install -U https://github.com/yt-dlp/yt-dlp/archive/master.tar.gz
 
       - name: Chay Script tao M3U
         run: python update_links.py
@@ -33,4 +34,3 @@ jobs:
           git add playlist.m3u
           git commit -m "Auto updated m3u link" || exit 0
           git push
-          
