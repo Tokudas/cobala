@@ -1,0 +1,29 @@
+name: Auto Update IPTV
+on:
+  schedule:
+    - cron: '0 */2 * * *'
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+    - uses: actions/checkout@v3
+    - uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+    # Cài đặt công cụ yt-dlp mới nhất
+    - run: pip install yt-dlp
+    - run: python update_iptv.py
+    - run: |
+        git config --local user.name "github-actions[bot]"
+        git config --local user.email "github-actions[bot]@users.noreply.github.com"
+        # Kiểm tra file tồn tại trước khi add để tránh lỗi 128
+        if [ -f list-kenh.m3u ]; then
+          git add list-kenh.m3u
+          git commit -m "Update link IPTV" || exit 0
+          git push
+        else
+          echo "File khong ton tai, bo qua commit."
+        fi
