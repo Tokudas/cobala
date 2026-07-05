@@ -1,0 +1,36 @@
+name: Auto Update YouTube Live
+
+on:
+  schedule:
+    - cron: '0 */3 * * *' # Chạy tự động mỗi 3 tiếng
+  workflow_dispatch:      # Nút bấm chạy thủ công
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Install yt-dlp
+        run: |
+          python -m pip install --upgrade pip
+          pip install yt-dlp
+
+      - name: Chay Script tao M3U
+        run: python update_links.py
+
+      - name: Commit and Push M3U file
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add playlist.m3u
+          git commit -m "Auto updated m3u link" || exit 0
+          git push
+          
