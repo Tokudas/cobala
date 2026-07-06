@@ -2,7 +2,7 @@ import requests
 import datetime
 
 def fetch_tv360_link():
-    channel_id = '32' # ID của kênh HiTV
+    channel_id = '32'
     headers = {
         'User-Agent': 'Mozilla/5.0 (Linux; Android 10; SM-G973F) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36',
         'Referer': f'https://m.tv360.vn/tv/hitv?ch={channel_id}'
@@ -16,21 +16,24 @@ def fetch_tv360_link():
             data = res.json()
             return data.get('data', {}).get('stream_url', '')
     except Exception as e:
-        print(f"Lỗi khi cào dữ liệu: {e}")
+        print(f"Lỗi kết nối API: {e}")
     return None
 
 def update_playlist():
     link = fetch_tv360_link()
-    if link:
-        # Ghi đè file playlist.m3u bằng link có chứa key mới nhất
-        with open("playlist.m3u", "w", encoding="utf-8") as f:
-            f.write("#EXTM3U\n")
-            f.write(f'#EXTINF:-1 tvg-id="HiTV" tvg-name="HiTV" group-title="TV360",HiTV (Cập nhật: {datetime.datetime.now().strftime("%H:%M")})\n')
+    
+    # Luôn luôn tạo file playlist.m3u để sửa lỗi Git tuyệt đối
+    with open("playlist.m3u", "w", encoding="utf-8") as f:
+        f.write("#EXTM3U\n")
+        if link:
+            f.write(f'#EXTINF:-1 tvg-id="HiTV" tvg-name="HiTV" group-title="TV360",HiTV (Cập nhật: {datetime.datetime.now().strftime("%H:%M:%S")})\n')
             f.write(link + "\n")
-        print("Cập nhật key thành công!")
-    else:
-        print("Không lấy được link/key từ TV360.")
+            print("Đã lấy được key và cập nhật link thành công!")
+        else:
+            # Nếu hệ thống bận, ghi link tạm thời để file không bị trống
+            f.write('#EXTINF:-1 group-title="Bảo trì",Kênh HiTV đang chờ làm mới key\n')
+            f.write("https://example.com/temporary.m3u8\n")
+            print("Tạm thời không lấy được key, đã tạo file dự phòng.")
 
 if __name__ == "__main__":
     update_playlist()
-          
